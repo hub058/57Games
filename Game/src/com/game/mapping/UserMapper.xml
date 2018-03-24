@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.mapper.UserMapper">
+	<!-- Result Map -->
+	<resultMap id="baseResultMap" type="com.game.model.User">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pass" property="pass"/>
+        <result column="status" property="status"/>
+        <result column="phone" property="phone"/>
+        <result column="mail" property="mail"/>
+        <result column="realname" property="realname"/>
+        <result column="idnumber" property="idnumber"/>
+        <result column="totalrecharge" property="totalrecharge"/>
+	</resultMap>
+
+
+	<!-- table name -->
+	<sql id="table_name">
+		user
+	</sql>
+	<!-- property table all fields -->
+    <sql id="base_column_list">
+			id,
+			name,
+			pass,
+			status,
+			phone,
+			mail,
+			realname,
+			idnumber,
+			totalrecharge
+    </sql>
+    <sql id="update_clause">
+        <trim suffixOverrides=",">
+            <if test="name != null and name !=''">
+                name=#{name},
+            </if>
+            <if test="pass != null and pass !=''">
+                pass=#{pass},
+            </if>
+            <if test="status != null and status !=''">
+                status=#{status},
+            </if>
+            <if test="phone != null and phone !=''">
+                phone=#{phone},
+            </if>
+            <if test="mail != null and mail !=''">
+                mail=#{mail},
+            </if>
+            <if test="realname != null and realname !=''">
+                realname=#{realname},
+            </if>
+            <if test="idnumber != null and idnumber !=''">
+                idnumber=#{idnumber},
+            </if>
+            <if test="totalrecharge != null and totalrecharge !=''">
+                totalrecharge=#{totalrecharge},
+            </if>
+        </trim>
+    </sql>
+    <sql id="query_where_clause">
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="id != null and id !=''">
+                and id=#{id}
+            </if>
+            <if test="name != null and name !=''">
+                and name=#{name}
+            </if>
+            <if test="pass != null and pass !=''">
+                and pass=#{pass}
+            </if>
+            <if test="status != null and status !=''">
+                and status=#{status}
+            </if>
+            <if test="phone != null and phone !=''">
+                and phone=#{phone}
+            </if>
+            <if test="mail != null and mail !=''">
+                and mail=#{mail}
+            </if>
+            <if test="realname != null and realname !=''">
+                and realname=#{realname}
+            </if>
+            <if test="idnumber != null and idnumber !=''">
+                and idnumber=#{idnumber}
+            </if>
+            <if test="totalrecharge != null and totalrecharge !=''">
+                and totalrecharge=#{totalrecharge}
+            </if>
+        </trim>
+    </sql>
+    <insert id="save" parameterType="Object" >
+        insert into 
+        <include refid="table_name" />
+        (
+			name,
+			pass,
+			status,
+			phone,
+			mail,
+			realname,
+			idnumber,
+			totalrecharge
+        )
+        values
+        (
+			#{name},
+			#{pass},
+			#{status},
+			#{phone},
+			#{mail},
+			#{realname},
+			#{idnumber},
+			#{totalrecharge}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="baseResultMap" parameterType="Object">
+        select
+        <include refid="base_column_list" />
+        from <include refid="table_name" /> where id = #{id}
+    </select>
+
+    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from 
+        <include refid="table_name" />
+        <include refid="query_where_clause" />
+    </select>
+
+    <select id="queryByList" resultMap="baseResultMap"	parameterType="Object">
+        select
+        <include refid="base_column_list"/>
+        from 
+        <include refid="table_name" />
+        <include refid="query_where_clause"/>
+        order by id desc
+		${pageQueryCondition}
+    </select>
+	
+    <select id="queryByUser" resultMap="baseResultMap"	parameterType="Object">
+        select
+        <include refid="base_column_list"/>
+        from 
+        <include refid="table_name" />
+        <include refid="query_where_clause"/>
+        order by id desc
+    </select>
+
+    <update id="update" parameterType="Object" >
+        update <include refid="table_name" /> set <include refid="update_clause" /> where id = #{id}
+    </update>
+
+    <update id="updateResult" parameterType="Object" >
+        update <include refid="table_name" /> set <include refid="update_clause" /> where id = #{id}
+    </update>
+
+	<delete id="deleteById" parameterType="Object">
+		delete from <include refid="table_name" /> where id = #{id}
+	</delete>
+
+</mapper>   

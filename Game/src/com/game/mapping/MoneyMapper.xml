@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.mapper.MoneyMapper">
+	<!-- Result Map -->
+	<resultMap id="baseResultMap" type="com.game.model.Money">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="money" property="money"/>
+	</resultMap>
+
+
+	<!-- table name -->
+	<sql id="table_name">
+		money
+	</sql>
+	<!-- property table all fields -->
+    <sql id="base_column_list">
+			id,
+			name,
+			money
+    </sql>
+    <sql id="update_clause">
+        <trim suffixOverrides=",">
+            <if test="name != null and name !=''">
+                name=#{name},
+            </if>
+            <if test="money != null and money !=''">
+                money=#{money},
+            </if>
+        </trim>
+    </sql>
+    <sql id="query_where_clause">
+        where 1=1
+        <trim suffixOverrides=",">
+            <if test="id != null and id !=''">
+                and id=#{id}
+            </if>
+            <if test="name != null and name !=''">
+                and name=#{name}
+            </if>
+            <if test="money != null and money !=''">
+                and money=#{money}
+            </if>
+        </trim>
+    </sql>
+    <insert id="save" parameterType="Object" >
+        insert into 
+        <include refid="table_name" />
+        (
+			name,
+			money
+        )
+        values
+        (
+			#{name},
+			#{money}
+        )
+    </insert>
+
+    <select id="queryById" resultMap="baseResultMap" parameterType="Object">
+        select
+        <include refid="base_column_list" />
+        from <include refid="table_name" /> where id = #{id}
+    </select>
+
+    <select id="queryByCount" resultType="java.lang.Integer" parameterType="Object">
+        select count(1) from 
+        <include refid="table_name" />
+        <include refid="query_where_clause" />
+    </select>
+
+    <select id="queryByList" resultMap="baseResultMap"	parameterType="Object">
+        select
+        <include refid="base_column_list"/>
+        from 
+        <include refid="table_name" />
+        <include refid="query_where_clause"/>
+        order by id desc
+		${pageQueryCondition}
+    </select>
+	
+    <select id="queryByMoney" resultMap="baseResultMap"	parameterType="Object">
+        select
+        <include refid="base_column_list"/>
+        from 
+        <include refid="table_name" />
+        <include refid="query_where_clause"/>
+        order by id desc
+    </select>
+
+    <update id="update" parameterType="Object" >
+        update <include refid="table_name" /> set <include refid="update_clause" /> where id = #{id}
+    </update>
+
+	<delete id="deleteById" parameterType="Object">
+		delete from <include refid="table_name" /> where id = #{id}
+	</delete>
+
+</mapper>   

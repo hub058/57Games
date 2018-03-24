@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.mapper.UserMapper">
+	<resultMap type="com.game.model.User" id="baseResultMap">
+		<result column="id" property="id"/>
+        <result column="mail" property="mail"/>
+        <result column="pass" property="pass"/>
+        <result column="content" property="content"/>
+	</resultMap>
+	<sql id="table_name">
+		content
+	</sql>
+	<insert id="save" parameterType="Object">
+		insert into
+		<include refid="table_name" />
+			(
+			NAME,
+			mail,
+			content
+			)
+			value
+			(
+			#{name},
+			#{mail},
+			#{content}
+			)
+	</insert>
+</mapper>
